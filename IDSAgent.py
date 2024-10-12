@@ -1,7 +1,7 @@
-from tiles import Tiles
 from PapaAgent import PapaAgent
+from tiles import Tiles
 
-class DFSAgent(PapaAgent):
+class IDSAgent(PapaAgent):
     def dfs(self):
         Stack = [(0, 0, set(),  [(0, 0)])] 
         visited = set([(0, 0, frozenset(set()))])
@@ -22,4 +22,3 @@ class DFSAgent(PapaAgent):
                         visited.add((nx, ny, frozenset(new_coins)))
                         Stack.append((nx, ny, new_coins, path + [(nx, ny)]))
         return None
-
