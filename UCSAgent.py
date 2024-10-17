@@ -23,7 +23,8 @@ class UCSAgent(PapaAgent):
                         AddedCoins.add((nx, ny))
                     if self.maze.maze[ny][nx] == Tiles.Slime:
                         nCost += 30
-                    if (nx, ny, frozenset(AddedCoins)) not in self.visited:
+                    x2, y2, coins2, path2 = self.visited[x][y] 
+                    if (nx, ny, frozenset(AddedCoins)) not in self.visited or (nx,ny, frozenset(AddedCoins)) in self.visited and :
                         self.visited.add((nx, ny, frozenset(AddedCoins)))
                         queue.put((cost+nCost,(nx, ny, AddedCoins, path + [(nx, ny)])))
         return None

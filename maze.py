@@ -2,12 +2,13 @@ from colors import Colors
 from tiles import Tiles
 from BFSAgent import BFSAgent
 from DFSAgent import DFSAgent
-from UCSAgent import UCSAgent
+# from UCSAgent import UCSAgent
 import tracemalloc
 import random
 import time
 
-
+import os
+os.system("")
 class Maze():
 
     def __init__(self):
@@ -47,9 +48,12 @@ class Maze():
         for row in self.maze:
             print(Colors.Red, end='')
             for cell in row:
-                if cell == Tiles.Wall: print('██', end='')
-                elif cell == Tiles.Slime: print(Colors.Purple, end='')
-                elif cell == Tiles.Coin: print(Colors.Yellow, end='')
+                if cell == Tiles.Wall: 
+                    print('██', end='')
+                elif cell == Tiles.Slime: 
+                    print(Colors.Purple, end='')
+                elif cell == Tiles.Coin: 
+                    print(Colors.Yellow, end='')
                 else: print('  ', end='')
             print(Colors.Red)
 
@@ -68,19 +72,26 @@ class Maze():
         if not path:
             print("No path to print.")
             return
-
-        print(Colors.Red * (self.max_x + 2)) 
-        for y, row in enumerate(self.maze):
-            print(Colors.Red, end='')
-            for x, cell in enumerate(row):
-                if (x, y) in path and (y, x) in self.coins: print(Colors.Green, end='')
-                elif (x, y) in path and cell == Tiles.Slime : print(Colors.Red, end='')
-                elif (x, y) in path: print(Colors.Blue, end='')
-                elif cell == Tiles.Wall: print('██', end='')
-                elif cell == Tiles.Coin: print(Colors.Yellow, end='')
-                elif cell == Tiles.Slime: print(Colors.Purple, end='')
-                else: print('  ', end='')
-            print(Colors.Red)
+        else:
+            print(Colors.Red * (self.max_x + 2)) 
+            for y, row in enumerate(self.maze):
+                print(Colors.Red, end='')
+                for x, cell in enumerate(row):
+                    if (x, y) in path and (y, x) in self.coins: 
+                        print(Colors.Green, end='')
+                    elif (x, y) in path and cell == Tiles.Slime : 
+                        print(Colors.Red, end='')
+                    elif (x, y) in path: 
+                        print(Colors.Blue, end='')
+                    elif cell == Tiles.Wall:
+                        print('██', end='')
+                    elif cell == Tiles.Coin:
+                        print(Colors.Yellow, end='')
+                    elif cell == Tiles.Slime:
+                        print(Colors.Purple, end='')
+                    else: 
+                        print('  ', end='')
+                print(Colors.Red)
 
         print(Colors.Red * (self.max_x + 2))
         print(f"Effort:   {self.PathCost(path)}")
@@ -106,6 +117,7 @@ maze.PutCoins()
 maze.PutSlime()
 maze.PrintMaze()
 
+print("")
 
 STime = time.perf_counter()
 tracemalloc.start()
@@ -131,15 +143,15 @@ ETime = time.perf_counter()
 print(f"Elapsed time: {ETime-STime:.4f} seconds")
 
 
-STime = time.perf_counter()
-tracemalloc.start()
-UCS = UCSAgent(maze)
-path3= UCS.UCS()
-maze.PrintPath(path3)
-current, peak = tracemalloc.get_traced_memory()
-print(f"Peak memory usage: {peak / 10**6} MB")
-tracemalloc.stop()
-ETime = time.perf_counter()
-print(f"Elapsed time: {ETime-STime:.4f} seconds")
+# STime = time.perf_counter()
+# tracemalloc.start()
+# UCS = UCSAgent(maze)
+# path3= UCS.UCS()
+# maze.PrintPath(path3)
+# current, peak = tracemalloc.get_traced_memory()
+# print(f"Peak memory usage: {peak / 10**6} MB")
+# tracemalloc.stop()
+# ETime = time.perf_counter()
+# print(f"Elapsed time: {ETime-STime:.4f} seconds")
 
 # ///fjdhfjhaufhs
