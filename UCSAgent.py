@@ -6,7 +6,6 @@ class UCSAgent(PapaAgent):
     def UCS(self):
         queue = PriorityQueue() 
         queue.put((0,(0, 0, set(),  [(0, 0)])))
-        
         while not queue.empty():
             cost, info = queue.get()
             x, y, coins, path = info
@@ -15,16 +14,20 @@ class UCSAgent(PapaAgent):
                 return cost, path
             
             for dx, dy in self.directions:
+                
                 nx, ny = x + dx, y + dy
-                nCost = 1
+                if dx == -1 or dy == -1:
+                    nCost = 2
+                elif dx == 1 or dy == 1:
+                    nCost = 1
+
                 if self.maze.IsValidPos(nx, ny):
                     AddedCoins = set(coins)
                     if self.maze.maze[ny][nx] == Tiles.Coin:
                         AddedCoins.add((nx, ny))
                     if self.maze.maze[ny][nx] == Tiles.Slime:
                         nCost += 30
-                    x2, y2, coins2, path2 = self.visited[x][y] 
-                    if (nx, ny, frozenset(AddedCoins)) not in self.visited or (nx,ny, frozenset(AddedCoins)) in self.visited and :
+                    if (nx, ny, frozenset(AddedCoins)) not in self.visited:
                         self.visited.add((nx, ny, frozenset(AddedCoins)))
                         queue.put((cost+nCost,(nx, ny, AddedCoins, path + [(nx, ny)])))
         return None
