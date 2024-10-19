@@ -2,12 +2,14 @@ from colors import Colors
 from tiles import Tiles
 from BFSAgent import BFSAgent
 from DFSAgent import DFSAgent
-from UCSAgent import UCSAgent
-from IDSAgent import IDSAgent
+# from UCSAgent import UCSAgent
+from AStarAgent import AStarAgent
 import tracemalloc
 import random
 import time
 
+import os
+os.system("")
 class Maze():
 
     def __init__(self):
@@ -142,27 +144,20 @@ ETime = time.perf_counter()
 print(f"Elapsed time: {ETime-STime:.4f} seconds")
 
 
-STime = time.perf_counter()
-tracemalloc.start()
-UCS = UCSAgent(maze)
-path3= UCS.UCS()
-maze.PrintPath(path3)
-current, peak = tracemalloc.get_traced_memory()
-print(f"Peak memory usage: {peak / 10**6} MB")
-tracemalloc.stop()
-ETime = time.perf_counter()
-print(f"Elapsed time: {ETime-STime:.4f} seconds")
-
-
-STime = time.perf_counter()
-tracemalloc.start()
-IDS = IDSAgent(maze)
-path4= IDS.IDS()
-maze.PrintPath(path4)
-current, peak = tracemalloc.get_traced_memory()
-print(f"Peak memory usage: {peak / 10**6} MB")
-tracemalloc.stop()
-ETime = time.perf_counter()
-print(f"Elapsed time: {ETime-STime:.4f} seconds")
+# STime = time.perf_counter()
+# tracemalloc.start()
+# UCS = UCSAgent(maze)
+# path3= UCS.UCS()
+# maze.PrintPath(path3)
+# current, peak = tracemalloc.get_traced_memory()
+# print(f"Peak memory usage: {peak / 10**6} MB")
+# tracemalloc.stop()
+# ETime = time.perf_counter()
+# print(f"Elapsed time: {ETime-STime:.4f} seconds")
 
 # ///fjdhfjhaufhs
+
+
+
+
+
