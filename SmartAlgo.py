@@ -1,8 +1,5 @@
 from PapaAgent import PapaAgent
 
-
-
-
 class SmartAlgo(PapaAgent):
 
     def heuristic(self,nx,ny):
