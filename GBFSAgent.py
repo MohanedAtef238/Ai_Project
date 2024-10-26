@@ -1,11 +1,10 @@
-
 from queue import PriorityQueue
 from tiles import Tiles
 from PapaAgent import PapaAgent
 from SmartAlgo import SmartAlgo
 
-class AStarAgent(SmartAlgo): 
-    def AStar(self): 
+class GBFSAgent(SmartAlgo):
+    def GBFS(self):
         queue = PriorityQueue() 
         queue.put((0,(0, 0, set(),  [(0, 0)])))
         while not queue.empty():
@@ -31,7 +30,7 @@ class AStarAgent(SmartAlgo):
                         nCost += 30
                     if (nx, ny, frozenset(AddedCoins)) not in self.visited:
                         self.visited.add((nx, ny, frozenset(AddedCoins)))
-                        queue.put((cost + nCost+self.heuristic(nx, ny),(nx,ny, AddedCoins, path + [(nx, ny)])))
+                        queue.put((nCost+self.heuristic(nx, ny),(nx,ny, AddedCoins, path + [(nx, ny)])))
 
         return None
     
