@@ -5,6 +5,7 @@ from DFSAgent import DFSAgent
 from GBFSAgent import GBFSAgent
 from UCSAgent import UCSAgent
 from AStarAgent import AStarAgent
+from SmartAlgo import SmartAlgo
 import tracemalloc
 import random
 import time
@@ -167,10 +168,19 @@ current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed timeeee: {ETime-STime:.4f} seconds")
+print(f"Elapsed time a greedy: {ETime-STime:.4f} seconds")
 
 
 
+tracemalloc.start()
+AStar = AStarAgent(maze)
+path5 = AStar.AStar()
+maze.PrintPath(path5)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time a star: {ETime-STime:.4f} seconds")
 # ///fjdhfjhaufhs
 
 

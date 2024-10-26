@@ -1,8 +1,9 @@
 from queue import PriorityQueue
 from tiles import Tiles
 from PapaAgent import PapaAgent
+from SmartAlgo import SmartAlgo
 
-class GBFSAgent(PapaAgent):
+class GBFSAgent(SmartAlgo):
     def GBFS(self):
         queue = PriorityQueue() 
         queue.put((0,(0, 0, set(),  [(0, 0)])))
@@ -32,6 +33,4 @@ class GBFSAgent(PapaAgent):
                         queue.put((nCost+self.heuristic(nx, ny),(nx,ny, AddedCoins, path + [(nx, ny)])))
 
         return None
-    def heuristic(self,nx,ny):
-        max_x,max_y=self.target
-        return abs(nx-max_x) + abs(ny-max_y)
+    
