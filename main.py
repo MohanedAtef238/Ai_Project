@@ -2,6 +2,7 @@ from BFSAgent import BFSAgent
 from DFSAgent import DFSAgent
 from GBFSAgent import GBFSAgent
 from UCSAgent import UCSAgent
+from IDSAgent import IDSAgent
 from AStarAgent import AStarAgent
 from maze import Maze
 import tracemalloc
@@ -37,6 +38,21 @@ tracemalloc.stop()
 ETime = time.perf_counter()
 print(f"Elapsed time: {ETime-STime:.4f} seconds")
 print(f"DFS")
+
+
+
+tracemalloc.start()
+STime = time.perf_counter()
+ids = IDSAgent(maze)
+result = ids.IDS()
+maze.PrintPath(result)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
+print(f"IDS")
+
 
 STime = time.perf_counter()
 tracemalloc.start()
