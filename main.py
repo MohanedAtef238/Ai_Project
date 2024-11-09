@@ -4,6 +4,7 @@ from GBFSAgent import GBFSAgent
 from UCSAgent import UCSAgent
 from IDSAgent import IDSAgent
 from AStarAgent import AStarAgent
+from HillClimbing import HillClimbingAgent  
 from maze import Maze
 import tracemalloc
 import time
@@ -90,3 +91,17 @@ tracemalloc.stop()
 ETime = time.perf_counter()
 print(f"Elapsed time a star: {ETime-STime:.4f} seconds")
 print(f"A star")
+
+
+
+
+tracemalloc.start()
+hill_climbing = HillClimbingAgent(maze)
+path6 = hill_climbing.hill_climbing()  
+maze.PrintPath(path6)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time for Hill Climbing: {ETime-STime:.4f} seconds")
+print(f"Hill Climbing")
