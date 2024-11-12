@@ -19,6 +19,10 @@ class Maze():
         self.max_x = len(self.maze[0])
         self.max_y = len(self.maze)
         self.coins = self.FindCoins()
+        self.slimeLocations= set()
+        self.coinLocations= set()
+    def get_slimeLocations(self):
+        return self.slimeLocations
     def IsValidPos(self, x, y):
             if(0 <= x < self.max_x and 0 <= y < self.max_y and self.maze[y][x] != Tiles.Wall):
                 return True
@@ -35,6 +39,7 @@ class Maze():
                     else:
                         self.maze[y][x] = Tiles.Coin
                         self.coins.add((y,x))
+                        self.coinLocations.add((y,x))
     def PutSlime(self):    
         for y, row in enumerate(self.maze):
             for x,cell in enumerate(row):
@@ -44,6 +49,7 @@ class Maze():
                         continue
                     else:
                         self.maze[y][x] = Tiles.Slime
+                        self.slimeLocations.add((y,x))
 
     def PrintMaze(self):
 
@@ -72,6 +78,8 @@ class Maze():
         return Cost
     def PrintPath(self, path):
         T, path = path
+        if T == -3:
+            return
         if not path:
             print("No path to print.")
             return

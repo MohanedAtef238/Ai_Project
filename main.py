@@ -4,6 +4,7 @@ from GBFSAgent import GBFSAgent
 from UCSAgent import UCSAgent
 from IDSAgent import IDSAgent
 from AStarAgent import AStarAgent
+from HillClimbing import HillClimbingAgent
 from maze import Maze
 import tracemalloc
 import time
@@ -41,19 +42,6 @@ print(f"DFS")
 
 
 
-tracemalloc.start()
-STime = time.perf_counter()
-ids = IDSAgent(maze)
-result = ids.IDS()
-maze.PrintPath(result)
-current, peak = tracemalloc.get_traced_memory()
-print(f"Peak memory usage: {peak / 10**6} MB")
-tracemalloc.stop()
-ETime = time.perf_counter()
-print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
-print(f"IDS")
-
-
 STime = time.perf_counter()
 tracemalloc.start()
 UCS = UCSAgent(maze)
@@ -66,7 +54,16 @@ ETime = time.perf_counter()
 print(f"Elapsed timee for ucs : {ETime-STime:.4f} seconds")
 print(f"UCS")
 
-
+tracemalloc.start()
+AStar = AStarAgent(maze)
+path5 = AStar.AStar()
+maze.PrintPath(path5)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time a star: {ETime-STime:.4f} seconds")
+print(f"A star")
 
 tracemalloc.start()
 GBFS = GBFSAgent(maze)
@@ -81,12 +78,28 @@ print(f"Greedy")
 
 
 tracemalloc.start()
-AStar = AStarAgent(maze)
-path5 = AStar.AStar()
-maze.PrintPath(path5)
+STime = time.perf_counter()
+HillClimbing = HillClimbingAgent(maze)
+result = HillClimbing.hill_climbing()
+maze.PrintPath(result)
 current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time a star: {ETime-STime:.4f} seconds")
-print(f"A star")
+print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
+print(f"Hill Climbing")
+
+# commented due to how long it runs sometimes when the maze gets too complicated.
+
+tracemalloc.start()
+STime = time.perf_counter()
+ids = IDSAgent(maze)
+result = ids.IDS()
+maze.PrintPath(result)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
+print(f"IDS")
+

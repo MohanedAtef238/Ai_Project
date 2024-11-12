@@ -23,12 +23,12 @@ class IDSAgent(PapaAgent):
         
         return 0, None  
     def IDS(self):
-        depth = 0
+        depth = 1
         completed = False
         while not completed:
             done, path = self.dfs_forIDS(depth)
             completed = done
-            depth += 1   
+            depth += 3  
 
         if completed:
             return 1,path
