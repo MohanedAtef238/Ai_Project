@@ -81,15 +81,15 @@ tracemalloc.start()
 STime = time.perf_counter()
 HillClimbing = HillClimbingAgent(maze)
 result = HillClimbing.hill_climbing()
+x,y = result
 maze.PrintPath(result)
-current, peak = tracemalloc.get_traced_memory()
-print(f"Peak memory usage: {peak / 10**6} MB")
-tracemalloc.stop()
-ETime = time.perf_counter()
-print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
+if x != -3:
+    current, peak = tracemalloc.get_traced_memory()
+    print(f"Peak memory usage: {peak / 10**6} MB")
+    tracemalloc.stop()
+    ETime = time.perf_counter()
+    print(f"Elapsed time for Hill Climbing: {ETime-STime:.4f} seconds")
 print(f"Hill Climbing")
-
-# commented due to how long it runs sometimes when the maze gets too complicated.
 
 tracemalloc.start()
 STime = time.perf_counter()
