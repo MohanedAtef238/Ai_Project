@@ -18,10 +18,6 @@ class AStarAgent(SmartAlgo):
             for dx, dy in self.directions:
                 
                 nx, ny = x + dx, y + dy
-                # if dx == -1 or dy == -1:
-                #     nCost = 2
-                # elif dx == 1 or dy == 1:
-                #     nCost = 1
                 nCost = 0
                 if self.maze.IsValidPos(nx, ny):
                     AddedCoins = set(coins)
