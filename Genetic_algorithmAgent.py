@@ -13,14 +13,9 @@ class GeneticAlgorithmAgent(SmartAlgo):
                 self.mutate(self.recombine(*self.select(2, self.population, fitness_fn)))
                 for _ in range(len(self.population))
             ]
-
-           
             fittest_individual = min(self.population, key=fitness_fn)
             if fitness_fn(fittest_individual) == f_thres:
                 return 1,fittest_individual
-
-            
-        
         return min(self.population, key=fitness_fn)
 
     
@@ -28,9 +23,8 @@ class GeneticAlgorithmAgent(SmartAlgo):
         g =4
         self.population = []
         for i in range(100):
-            new_individual = [self.directions[random.randrange(0, g)] for j in range(1000)]
+            new_individual = [self.directions[random.randrange(0, g)] for j in range(600)]
             self.population.append(new_individual)
-
         return self.population
 
 
@@ -44,10 +38,7 @@ class GeneticAlgorithmAgent(SmartAlgo):
             current[0], current[1] = current[0] + dx, current[1] + dy
             if not self.maze.IsValidPos(current[0], current[1]):
                 return float("inf")  
-            
-            fitvalue += 1  
-            
-        
+                fitvalue += 1  
             if self.maze.maze[current[1]][current[0]] == Tiles.Coin:
                 coinscollected += 1
                 fitvalue -= 50 

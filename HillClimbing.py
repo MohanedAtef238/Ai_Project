@@ -33,11 +33,3 @@ class HillClimbingAgent(SmartAlgo):
                 print("The Algorithm Failed to find a path and got stuck")
                 toReturn = (-3,path)
                 return toReturn
-            # PrintP= (1,path)
-            # self.maze.PrintPath(PrintP)
-            # print(f"Current position: {(x, y)}")
-            # print(f"Visited states: {self.visited}")
-            # print(f"Minimum heuristic: {Minimum[0]}")
-            # print(f"Stuck Status  {stuck}")
-            # time.sleep(2)
-            # print("running" , len(CollectedCoins))
