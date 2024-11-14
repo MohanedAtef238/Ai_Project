@@ -6,6 +6,7 @@ from IDSAgent import IDSAgent
 from AStarAgent import AStarAgent
 from HillClimbing import HillClimbingAgent
 from maze import Maze
+from SimulatedAnnealing import SimulatedAnnealing
 import tracemalloc
 import time
 
@@ -103,3 +104,18 @@ ETime = time.perf_counter()
 print(f"Elapsed time for IDS: {ETime-STime:.4f} seconds")
 print(f"IDS")
 
+
+print("")
+
+tracemalloc.start()
+STime = time.perf_counter()
+sa = SimulatedAnnealing(maze)
+schedule = lambda t: max(0.01, min(1, 1 - 0.001 * t))
+result = sa.simulated_annealing(schedule)
+maze.PrintPath(result)
+current, peak = tracemalloc.get_traced_memory()
+print(f"Peak memory usage: {peak / 10**6} MB")
+tracemalloc.stop()
+ETime = time.perf_counter()
+print(f"Elapsed time for Simulated Annealing: {ETime-STime:.4f} seconds")
+print(f"Simulated Annealing")
