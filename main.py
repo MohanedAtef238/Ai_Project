@@ -7,6 +7,7 @@ from AStarAgent import AStarAgent
 from HillClimbing import HillClimbingAgent
 from maze import Maze
 from SimulatedAnnealing import SimulatedAnnealing
+from Genetic_algorithmAgent import GeneticAlgorithmAgent
 import tracemalloc
 import time
 
@@ -26,7 +27,7 @@ current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time: {ETime-STime:.4f} seconds")
+print(f"Elapsed time BFS: {ETime-STime:.4f} seconds")
 print(f"BFS")
 
 tracemalloc.start()
@@ -38,7 +39,7 @@ current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time: {ETime-STime:.4f} seconds")
+print(f"Elapsed time DFS: {ETime-STime:.4f} seconds")
 print(f"DFS")
 
 
@@ -55,6 +56,7 @@ ETime = time.perf_counter()
 print(f"Elapsed timee for ucs : {ETime-STime:.4f} seconds")
 print(f"UCS")
 
+STime = time.perf_counter()
 tracemalloc.start()
 AStar = AStarAgent(maze)
 path5 = AStar.AStar()
@@ -63,9 +65,10 @@ current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time a star: {ETime-STime:.4f} seconds")
+print(f"Elapsed time A-star: {ETime-STime:.4f} seconds")
 print(f"A star")
 
+STime = time.perf_counter()
 tracemalloc.start()
 GBFS = GBFSAgent(maze)
 path4 = GBFS.GBFS()
@@ -74,10 +77,11 @@ current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time a greedy: {ETime-STime:.4f} seconds")
+print(f"Elapsed time for greedy: {ETime-STime:.4f} seconds")
 print(f"Greedy")
 
 
+STime = time.perf_counter()
 tracemalloc.start()
 STime = time.perf_counter()
 HillClimbing = HillClimbingAgent(maze)
@@ -92,6 +96,7 @@ if x != -3:
     print(f"Elapsed time for Hill Climbing: {ETime-STime:.4f} seconds")
 print(f"Hill Climbing")
 
+STime = time.perf_counter()
 tracemalloc.start()
 STime = time.perf_counter()
 ids = IDSAgent(maze)
@@ -107,15 +112,30 @@ print(f"IDS")
 
 print("")
 
-tracemalloc.start()
+# STime = time.perf_counter()
+# tracemalloc.start()
+# STime = time.perf_counter()
+# sa = SimulatedAnnealing(maze)
+# schedule = lambda t: max(0.01, min(1, 1 - 0.001 * t))
+# result = sa.simulated_annealing(schedule)
+# maze.PrintPath(result)
+# current, peak = tracemalloc.get_traced_memory()
+# print(f"Peak memory usage: {peak / 10**6} MB")
+# tracemalloc.stop()
+# ETime = time.perf_counter()
+# print(f"Elapsed time for Simulated Annealing: {ETime-STime:.4f} seconds")
+# print(f"Simulated Annealing")
+
 STime = time.perf_counter()
-sa = SimulatedAnnealing(maze)
-schedule = lambda t: max(0.01, min(1, 1 - 0.001 * t))
-result = sa.simulated_annealing(schedule)
-maze.PrintPath(result)
+tracemalloc.start()
+GA = GeneticAlgorithmAgent(maze)
+path5 = GA.genetic_algorithm(GA.fitness)
+maze.PrintPath(path5)
+for I in path5:
+    print(I)
 current, peak = tracemalloc.get_traced_memory()
 print(f"Peak memory usage: {peak / 10**6} MB")
 tracemalloc.stop()
 ETime = time.perf_counter()
-print(f"Elapsed time for Simulated Annealing: {ETime-STime:.4f} seconds")
-print(f"Simulated Annealing")
+print(f"Elapsed time for GA: {ETime-STime:.4f} seconds")
+print(f"Genetic Algorithm")
