@@ -7,22 +7,22 @@ class GeneticAlgorithmAgent(SmartAlgo):
         # print("initialized Agent")
         super().__init__(maze)
         self.population = []
-    def genetic_algorithm(self, fitness_fn, f_thres=0, ngen=300):
-        f_thres = -2000 + (30 * (len(self.maze.slimeLocations)/2)) - 50*(self.maxCoins) - 100
+    def genetic_algorithm(self, fitness_fn, f_thres=500, ngen=50):
+        # f_thres = +2000 - (30 * (len(self.maze.slimeLocations)/2)) + 50*(self.maxCoins) - 100 - 800
+        print(f"initializing... Threshold is {f_thres}")
         for i in range(ngen):
-            print("initializing...")
             self.init_population()
             print(f"Generation {i+1}")
             self.population = [
                 self.mutate(self.recombine(*self.select(2, fitness_fn)))
                 for _ in range(len(self.population))
             ]
-            fittest_individual = min(self.population, key=fitness_fn)
+            fittest_individual = max(self.population, key=fitness_fn)
             print(f"Best fitness: {fitness_fn(fittest_individual)}")
-            if fitness_fn(fittest_individual) <= f_thres:
+            if fitness_fn(fittest_individual) <= f_thres*2:
                 # fittest_individual = self.convert_state_to_path(fittest_individual)
                 return (1, fittest_individual)
-        return (None, min(self.population, key=fitness_fn))
+        return (None, max(self.population, key=fitness_fn))
 
 
     
@@ -30,7 +30,7 @@ class GeneticAlgorithmAgent(SmartAlgo):
         g = 4
         for i in range(100):
             path = [(0, 0)]
-            j, Q = 0, 1000
+            j, Q = 0, 10000
             while j < Q:
                 Cx, Cy = path[-1]
                 valid_moves = []
@@ -67,27 +67,27 @@ class GeneticAlgorithmAgent(SmartAlgo):
             if not self.maze.IsValidPos(Cx, Cy):
                 continue
             else:
-                fitvalue -= 1    
-                if self.maze.maze[Cy][Cx] == Tiles.Coin:
-                    coinscollected += 1
-                    fitvalue -= 50 
+                # fitvalue -= 1    
+                # if self.maze.maze[Cy][Cx] == Tiles.Coin:
+                #     coinscollected += 1
+                #     fitvalue -= 50 
 
-                if self.maze.maze[Cy][Cx] == Tiles.Slime:
-                    fitvalue += 30  
+                # if self.maze.maze[Cy][Cx] == Tiles.Slime:
+                #     fitvalue += 30  
 
-                if (Cx, Cy) == self.target:
-                    fitvalue -= 100
-                    return fitvalue
+                # if (Cx, Cy) == self.target:
+                #     fitvalue -= 100
+                #     return fitvalue
                 
-                fitvalue -=2*self.heuristic(Cx,Cy)
+                fitvalue +=self.heuristic(Cx,Cy)
 
-        Cx, Cy = path[-1]    
-        if len(state) < 1000 and (Cx, Cy) != self.target:
-            fitvalue +=5000
-        if coinscollected == self.maxCoins:
-            fitvalue -= 1000
-            if (Cx, Cy) == self.target:
-                fitvalue -= 1000
+        # Cx, Cy = path[-1]    
+        # if len(state) < 1000 and (Cx, Cy) != self.target:
+        #     fitvalue +=5000
+        # if coinscollected == self.maxCoins:
+        #     fitvalue -= 1000
+        #     if (Cx, Cy) == self.target:
+        #         fitvalue -= 1000
         return fitvalue
 
 
