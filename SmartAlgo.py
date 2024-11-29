@@ -21,13 +21,13 @@ class SmartAlgo(PapaAgent):
             finally:
                 slimePenalty += temp
 
-        return (2 * coinDistance) - slimePenalty + self.ManhattinHeuristic(nx,ny)
+        return (2 * coinDistance) - slimePenalty + self.ManhattanHeuristic(nx,ny)
     
-    def ManhattinHeuristic(self,nx,ny):
+    def ManhattanHeuristic(self,nx,ny):
         max_x,max_y=self.target
         try:
             temp = (abs(nx - max_x) + abs(ny - max_y)) 
-        except ZeroDivisionError:
+        except ZeroDivisionError: #back then manhattan was a secondary goal but not anymore so this part is irrelevant 
             temp = 0
         finally:
             return temp

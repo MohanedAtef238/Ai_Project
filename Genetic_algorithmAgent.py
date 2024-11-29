@@ -3,63 +3,97 @@ from tiles import Tiles
 from SmartAlgo import SmartAlgo
 
 class GeneticAlgorithmAgent(SmartAlgo):
-    
-    
-    def genetic_algorithm(self, fitness_fn, f_thres=700, ngen=1000):
-       
+    def __init__(self, maze):
+        # print("initialized Agent")
+        super().__init__(maze)
+        self.population = []
+    def genetic_algorithm(self, fitness_fn, f_thres=500, ngen=50):
+        # f_thres = +2000 - (30 * (len(self.maze.slimeLocations)/2)) + 50*(self.maxCoins) - 100 - 800
+        print(f"initializing... Threshold is {f_thres}")
         for i in range(ngen):
-          
+            self.init_population()
+            print(f"Generation {i+1}")
             self.population = [
-                self.mutate(self.recombine(*self.select(2, self.population, fitness_fn)))
+                self.mutate(self.recombine(*self.select(2, fitness_fn)))
                 for _ in range(len(self.population))
             ]
-            fittest_individual = min(self.population, key=fitness_fn)
-            if fitness_fn(fittest_individual) == f_thres:
-                return 1,fittest_individual
-        return min(self.population, key=fitness_fn)
+            fittest_individual = max(self.population, key=fitness_fn)
+            print(f"Best fitness: {fitness_fn(fittest_individual)}")
+            if fitness_fn(fittest_individual) <= f_thres*2:
+                # fittest_individual = self.convert_state_to_path(fittest_individual)
+                return (1, fittest_individual)
+        return (None, max(self.population, key=fitness_fn))
+
 
     
     def init_population(self):
-        g =4
-        self.population = []
+        g = 4
         for i in range(100):
-            new_individual = [self.directions[random.randrange(0, g)] for j in range(600)]
-            self.population.append(new_individual)
+            path = [(0, 0)]
+            j, Q = 0, 10000
+            while j < Q:
+                Cx, Cy = path[-1]
+                valid_moves = []
+                for dx, dy in self.directions:
+                    X, Y = Cx + dx, Cy + dy
+                    if self.maze.IsValidPos(X, Y) and (X, Y) not in path:
+                        valid_moves.append((dx, dy))
+
+                if not valid_moves:
+                    break
+
+                nx, ny = random.choice(valid_moves)
+                X, Y = Cx + nx, Cy + ny
+
+                if (X, Y) == self.target:
+                    break
+                path.append((X, Y))
+                j += 1
+
+            self.population.append(path)
         return self.population
 
 
 
+
     def fitness(self, state):
-        current = self.start
+        path = [(0, 0)]
         fitvalue = 0
         coinscollected = 0
-
         for dx, dy in state:
-            current[0], current[1] = current[0] + dx, current[1] + dy
-            if not self.maze.IsValidPos(current[0], current[1]):
-                return float("inf")  
-                fitvalue += 1  
-            if self.maze.maze[current[1]][current[0]] == Tiles.Coin:
-                coinscollected += 1
-                fitvalue -= 50 
-            
-        
-            if self.maze.maze[current[1]][current[0]] == Tiles.Slime:
-                fitvalue += 30  
-            
-            
-            if (current[0], current[1]) == self.target:
-                fitvalue -= 100  
-        
-    
-        if coinscollected == self.maxCoins:
-            fitvalue -= 150 
-        
+            Cx, Cy = path[-1]
+            path += [(Cx + dx, Cy + dy)]
+            Cx, Cy = path[-1]
+            if not self.maze.IsValidPos(Cx, Cy):
+                continue
+            else:
+                # fitvalue -= 1    
+                # if self.maze.maze[Cy][Cx] == Tiles.Coin:
+                #     coinscollected += 1
+                #     fitvalue -= 50 
+
+                # if self.maze.maze[Cy][Cx] == Tiles.Slime:
+                #     fitvalue += 30  
+
+                # if (Cx, Cy) == self.target:
+                #     fitvalue -= 100
+                #     return fitvalue
+                
+                fitvalue +=self.heuristic(Cx,Cy)
+
+        # Cx, Cy = path[-1]    
+        # if len(state) < 1000 and (Cx, Cy) != self.target:
+        #     fitvalue +=5000
+        # if coinscollected == self.maxCoins:
+        #     fitvalue -= 1000
+        #     if (Cx, Cy) == self.target:
+        #         fitvalue -= 1000
         return fitvalue
 
 
     def mutate(self,state):
-        if random.uniform(0, 1) >= 0.2:
+        # print("Mutating")
+        if random.uniform(0, 1) >= 0.1:
             return state         
         else:
             n = len(state)
@@ -72,15 +106,24 @@ class GeneticAlgorithmAgent(SmartAlgo):
         
 
     def select(self,k,fitness_fn):
-        
+        # print("Selecting")
         selected = random.choices(self.population, k=k) 
         selected = sorted(selected, key=fitness_fn, reverse=True)  
         return selected[:2]  
         
         
     def recombine(self,x, y):
+        # print("Recombining")
         n = len(x)
         c = random.randrange(0, n)
         return x[:c] + y[c:]
 
-
+    def convert_state_to_path(self,state):
+        path = [(0, 0)]
+        print("PRINTINGG PATHH EDITING AAAAAAAAAAAAAAAAAA")
+        for X, Y in state:
+            print(path[-1])
+            Cx, Cy = path[-1]
+            path += [(Cx + X, Cy + Y)]
+        return path
+            

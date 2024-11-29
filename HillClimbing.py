@@ -8,7 +8,7 @@ class HillClimbingAgent(SmartAlgo):
 
         while True:
             x, y, coins, path, cost = current
-            Minimum = (float('inf'), (0, 0), frozenset())
+            Min = (float('inf'), (0, 0), frozenset())
             stuck = True
             
             if (x, y) == self.target and len(coins) == self.maxCoins:
@@ -20,16 +20,16 @@ class HillClimbingAgent(SmartAlgo):
                     if self.maze.maze[ny][nx] == Tiles.Coin:
                         AddedCoins.add((nx, ny))
                     heuristic_value = self.heuristic(nx, ny)
-                    if heuristic_value < Minimum[0] and (nx,ny, frozenset(AddedCoins)) not in self.visited:
-                        Minimum = (heuristic_value, (nx, ny), AddedCoins)
+                    if heuristic_value < Min[0] and (nx,ny, frozenset(AddedCoins)) not in self.visited:
+                        Min = (heuristic_value, (nx, ny), AddedCoins)
                         stuck = False
-            BestX,BestY = Minimum[1]
-            CollectedCoins = Minimum[2]
+            BestX,BestY = Min[1]
+            CollectedCoins = Min[2]
             if not stuck:
                 if (BestX,BestY, frozenset(CollectedCoins)) not in self.visited:
                         self.visited.add((BestX,BestY, frozenset(CollectedCoins)))
                         current = (BestX,BestY, CollectedCoins, path + [(BestX,BestY)], cost + 1)
             elif stuck:
                 print("The Algorithm Failed to find a path and got stuck")
-                toReturn = (-3,path)
+                toReturn = (1,path)
                 return toReturn
