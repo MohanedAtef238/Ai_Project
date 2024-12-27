@@ -49,3 +49,7 @@ class QBot:
         else:
             return -1
 
+    def q_episode_travesing(self, max_episodes):
+        epsillon_factor = 0.3 
+        for i in range (max_episodes):
+            
