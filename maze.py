@@ -44,7 +44,7 @@ class Maze():
         for y, row in enumerate(self.maze):
             for x,cell in enumerate(row):
                 if cell == Tiles.Empty or cell == Tiles.Slime:
-                    if random.random() < 0.985:
+                    if random.random() < 0.99:
                         self.maze[y][x] = Tiles.Empty
                         continue
                     else:

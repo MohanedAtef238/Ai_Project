@@ -1,7 +1,7 @@
 import numpy as np
 import random
 from tiles import Tiles
-from maze import Maze
+from time import time
 class QBot:
     def __init__(self, maze, learnRate, discountFactor):
         assert 0 < learnRate < 1 
@@ -15,7 +15,7 @@ class QBot:
         self.maxCoins = len(maze.coins)
         self.start = (0, 0)  
         self.target = (maze.max_x - 1, maze.max_y - 1)
-        self.decreasing_factor = 0.001
+        self.decreasing_factor = 0.4
 
     def q_function(self, current_state, action, reward, next_state):
         # here i used the current states that will be given in the traversing function to find the update values according to the next state influenced by an action
@@ -41,20 +41,20 @@ class QBot:
     def reward_function(self,state, next_state):
         x, y = next_state
         if state == next_state:
-            return -15
+            return -100
         else:
             if self.maze.maze[y][x] == Tiles.Coin:  
                 return 10
             elif self.maze.maze[y][x] == Tiles.Slime: 
-                return -30
+                return -20
             elif next_state == self.target:
-                return 100
+                return 1000
             else:
                 return -1
         
     def action_taker(self, state, action):
-        x,y = state
-        dx ,dy = action 
+        x, y = state
+        dx, dy = action 
         nx, ny = x+dx, y+dy
         next_state = nx, ny
         if self.maze.IsValidPos(nx, ny):
@@ -64,28 +64,39 @@ class QBot:
         
 
     def q_episode_travesing(self, max_episodes):
-        epsillon_factor = 0.3 
+        max_steps_allowed = 1000
+        epsillon_factor = 0.7 
         for i in range (max_episodes):
+            steps = 0 
             state = self.start
             total_rewards = 0
-            while state != self.target:
+            while state != self.target and steps <= max_steps_allowed:
                 current_action = self.epsilon_action(state, epsillon_factor)
                 incoming_state = self.action_taker(state, current_action)
                 current_reward = self.reward_function(state, incoming_state)
                 self.q_function(state, current_action,current_reward, incoming_state)
                 state = incoming_state
                 total_rewards += current_reward
+                steps += 1
             epsillon_factor*= self.decreasing_factor
             print(f"Episode {i+1}, Current Reward Total = {total_rewards}")
+        
+        print("done done :D")
         return 
 
     def path_generation_test(self):
+        print("ana hena 1")
         state = self.start
         path = [state]
         while state!= self.target:
-            x, y =state
-            action_I = np.argmax(self.q_table[y,x])
+            print("ana bageb el path 1")
+            x, y = state
+            action_I = np.argmax(self.q_table[y,x, :])
+            print(f"ana gebt eno a7san tare2 {action_I}")
             action = self.directions[action_I]
-            state = self.action_taker[state, action]
+            print("ana hena gebt el action")
+            state = self.action_taker(state, action)
+            print("ana gadedt el state")
             path.append(state)
+            print("ana zawedt el path")
         return 1, path
