@@ -15,6 +15,7 @@ class QBot:
         self.maxCoins = len(maze.coins)
         self.start = (0, 0)  
         self.target = (maze.max_x - 1, maze.max_y - 1)
+        self.decreasing_factor = 0.001
 
     def q_function(self, current_state, action, reward, next_state):
         # here i used the current states that will be given in the traversing function to find the update values according to the next state influenced by an action
