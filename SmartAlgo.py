@@ -23,7 +23,7 @@ class SmartAlgo(PapaAgent):
 
         return (2 * coinDistance) - slimePenalty + self.ManhattanHeuristic(nx,ny)
     
-    def ManhattanHeuristic(self,nx,ny):
+    def ManhattanHeuristic(self, nx,ny):
         max_x,max_y=self.target
         try:
             temp = (abs(nx - max_x) + abs(ny - max_y)) 
