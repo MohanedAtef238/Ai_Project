@@ -1,8 +1,7 @@
 import numpy as np
 import random
-from tiles import Tiles  
-from collections import deque
-from PapaAgent import PapaAgent
+from tiles import Tiles
+from maze import Maze
 class QBot:
     def __init__(self, maze, learnRate, discountFactor):
         assert 0 < learnRate < 1 
@@ -39,29 +38,54 @@ class QBot:
             pruposed_action = np.argmax(self.q_table[y, x])
             return self.directions[pruposed_action]
 
-    def reward_function(self,next_state):
+    def reward_function(self,state, next_state):
         x, y = next_state
-        if self.maze[y][x] == Tiles.Coin:  
-            return 10
-        elif self.maze[y][x] == Tiles.Slime: 
-            return -20
-        elif next_state == self.target:
-            return 100
+        if state == next_state:
+            return -15
         else:
-            return -1
+            if self.maze.maze[y][x] == Tiles.Coin:  
+                return 10
+            elif self.maze.maze[y][x] == Tiles.Slime: 
+                return -30
+            elif next_state == self.target:
+                return 100
+            else:
+                return -1
         
     def action_taker(self, state, action):
         x,y = state
-        nx,ny = action 
-        nextState = x + nx , y + ny
+        dx ,dy = action 
+        nx, ny = x+dx, y+dy
+        next_state = nx, ny
         if self.maze.IsValidPos(nx, ny):
+            return next_state
+        
+        return state
         
 
     def q_episode_travesing(self, max_episodes):
         epsillon_factor = 0.3 
         for i in range (max_episodes):
             state = self.start
-            totalRewards = 0
+            total_rewards = 0
             while state != self.target:
-                currentAction = self.epsilon_action(state, epsillon_factor)
+                current_action = self.epsilon_action(state, epsillon_factor)
+                incoming_state = self.action_taker(state, current_action)
+                current_reward = self.reward_function(state, incoming_state)
+                self.q_function(state, current_action,current_reward, incoming_state)
+                state = incoming_state
+                total_rewards += current_reward
+            epsillon_factor*= self.decreasing_factor
+            print(f"Episode {i+1}, Current Reward Total = {total_rewards}")
+        return 
 
+    def path_generation_test(self):
+        state = self.start
+        path = [state]
+        while state!= self.target:
+            x, y =state
+            action_I = np.argmax(self.q_table[y,x])
+            action = self.directions[action_I]
+            state = self.action_taker[state, action]
+            path.append(state)
+        return 1, path
