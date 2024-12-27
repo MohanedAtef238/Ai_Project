@@ -14,7 +14,7 @@ import time
 
 maze = Maze()
 maze.PutCoins()
-maze.PutSlime()
+# maze.PutSlime()
 maze.PrintMaze()
 
 print("")
@@ -144,8 +144,8 @@ print(f"UCS")
 
 STime = time.perf_counter()
 tracemalloc.start()
-qbot = QBot(maze, 0.1, 0.9)
-qbot.q_episode_travesing(600)
+qbot = QBot(maze, 0.6, 0.5)
+qbot.q_episode_travesing(400)
 pathQ = qbot.path_generation_test()
 print("path generated")
 maze.PrintPath(pathQ)

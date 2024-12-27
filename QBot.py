@@ -1,12 +1,12 @@
 import numpy as np
 import random
 from tiles import Tiles
-from time import time
+import time 
 class QBot:
     def __init__(self, maze, learnRate, discountFactor):
         assert 0 < learnRate < 1 
         assert 0 < discountFactor < 1
-
+        self.AddedCoins = set()
         self.learnRate = learnRate
         self.directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
         self.q_table = np.zeros((maze.max_y, maze.max_x, len(self.directions)))
@@ -41,9 +41,11 @@ class QBot:
     def reward_function(self,state, next_state):
         x, y = next_state
         if state == next_state:
-            return -100
+            return -40
         else:
-            if self.maze.maze[y][x] == Tiles.Coin:  
+            if self.maze.maze[y][x] == Tiles.Coin and (y,x) not in self.AddedCoins :
+                if self.maze.maze[y][x] == Tiles.Coin:
+                    self.AddedCoins.add((y, x))  
                 return 10
             elif self.maze.maze[y][x] == Tiles.Slime: 
                 return -20
@@ -65,7 +67,7 @@ class QBot:
 
     def q_episode_travesing(self, max_episodes):
         max_steps_allowed = 1000
-        epsillon_factor = 0.7 
+        epsillon_factor = 0.2 
         for i in range (max_episodes):
             steps = 0 
             state = self.start
@@ -84,19 +86,59 @@ class QBot:
         print("done done :D")
         return 
 
+    # def path_generation_test(self):
+    #     print("ana hena 1")
+    #     state = self.start
+    #     path = [state]
+    #     while state!= self.target:
+    #         x, y = state
+    #         action_I = np.argmax(self.q_table[y,x, :])
+    #         action = self.directions[action_I]
+    #         state = self.action_taker(state, action)
+    #         path.append(state)
+    #         print(path)
+    #         time.sleep(0.3)
+    #     return 1, path
+
     def path_generation_test(self):
-        print("ana hena 1")
         state = self.start
         path = [state]
-        while state!= self.target:
-            print("ana bageb el path 1")
+        visited = set([state])  # Track visited states to prevent loops
+        
+        while state != self.target:
             x, y = state
-            action_I = np.argmax(self.q_table[y,x, :])
-            print(f"ana gebt eno a7san tare2 {action_I}")
-            action = self.directions[action_I]
-            print("ana hena gebt el action")
-            state = self.action_taker(state, action)
-            print("ana gadedt el state")
+            action_index = np.argmax(self.q_table[y, x])
+            action = self.directions[action_index]
+            
+            # Fix the syntax error in self.action_taker call
+            next_state = self.action_taker(state, action)
+            
+            # If we're stuck in a loop or can't move, try the next best action
+            if next_state in visited:
+                # Get all possible actions sorted by Q-value
+                possible_actions = sorted(
+                    range(len(self.directions)),
+                    key=lambda i: self.q_table[y, x, i],
+                    reverse=True
+                )
+                
+                # Try other actions until we find one that leads to an unvisited state
+                for action_idx in possible_actions[1:]:  # Skip the best action as we already tried it
+                    action = self.directions[action_idx]
+                    next_state = self.action_taker(state, action)
+                    if next_state not in visited:
+                        break
+                else:  # If we can't find any new states
+                    print("No valid path found - stuck in a loop")
+                    return 0, path
+            
+            state = next_state
             path.append(state)
-            print("ana zawedt el path")
+            visited.add(state)
+            
+            # Add a maximum path length check to prevent infinite loops
+            if len(path) > self.maze.max_x * self.maze.max_y:
+                print("Path too long - possible infinite loop")
+                return 0, path
+    
         return 1, path
