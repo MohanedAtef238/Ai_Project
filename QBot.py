@@ -1,7 +1,8 @@
 import numpy as np
 import random
-from tiles import Tiles
-
+from tiles import Tiles  
+from collections import deque
+from PapaAgent import PapaAgent
 class QBot:
     def __init__(self, maze, learnRate, discountFactor):
         assert 0 < learnRate < 1 
@@ -48,8 +49,19 @@ class QBot:
             return 100
         else:
             return -1
+        
+    def action_taker(self, state, action):
+        x,y = state
+        nx,ny = action 
+        nextState = x + nx , y + ny
+        if self.maze.IsValidPos(nx, ny):
+        
 
     def q_episode_travesing(self, max_episodes):
         epsillon_factor = 0.3 
         for i in range (max_episodes):
-            
+            state = self.start
+            totalRewards = 0
+            while state != self.target:
+                currentAction = self.epsilon_action(state, epsillon_factor)
+
