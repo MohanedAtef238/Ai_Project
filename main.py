@@ -144,8 +144,8 @@ print("")
 
 STime = time.perf_counter()
 tracemalloc.start()
-qbot = QBot(maze, 0.15, 0.8)
-qbot.q_episode_travesing(2500)
+qbot = QBot(maze, 0.105, 0.815)
+qbot.q_episode_travesing(825)
 pathQ = qbot.path_generation_test()
 print("path generated")
 filtered_path = [(x, y) for x, y, *_ in pathQ]
